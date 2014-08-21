@@ -67,7 +67,11 @@
 	   (< (minor this) (minor that)))
       (and (= (major this) (major that))
 	   (= (minor this) (minor that))
-	   (< (patch this) (patch that)))))
+	   (< (patch this) (patch that)))
+      (and (= (major this) (major that))
+	   (= (minor this) (minor that))
+	   (= (patch this) (patch that))
+	   (string< (pre-release this) (pre-release that)))))
 
 (defmethod after ((this version)(that version))
   (or (> (major this) (major that))
@@ -75,7 +79,11 @@
 	   (> (minor this) (minor that)))
       (and (= (major this) (major that))
 	   (= (minor this) (minor that))
-	   (> (patch this) (patch that)))))
+	   (> (patch this) (patch that)))
+      (and (= (major this) (major that))
+	   (= (minor this) (minor that))
+	   (= (patch this) (patch that))
+	   (string> (pre-release this) (pre-release that)))))
 
 
 (defmethod save-version((version version))

@@ -45,3 +45,35 @@
   (is (string= "1.1.1-SNAPSHOT" (as-string (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "SNAPSHOT"))))
   (is (string= "1.1.1+build-info" (as-string (make-instance 'version :major 1 :minor 1 :patch 1 :metadata "build-info"))))
   (is (string= "1.1.1-SNAPSHOT+build-info" (as-string (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "SNAPSHOT" :metadata "build-info")))))
+
+(test before-works
+  (is (before 
+       (make-instance 'version :major 1) 
+       (make-instance 'version :major 2)))
+  (is (not (before 
+	    (make-instance 'version :major 3) 
+	    (make-instance 'version :major 2))))
+  (is (before 
+       (make-instance 'version :major 1 :minor 1) 
+       (make-instance 'version :major 1 :minor 2)))
+  (is (not (before 
+	    (make-instance 'version :major 1 :minor 3) 
+	    (make-instance 'version :major 1 :minor 2))))
+  (is (before 
+       (make-instance 'version :major 1 :minor 1 :patch 1) 
+       (make-instance 'version :major 1 :minor 1 :patch 2)))
+  (is (not (before 
+	    (make-instance 'version :major 1 :minor 1 :patch 3) 
+	    (make-instance 'version :major 1 :minor 1 :patch 2))))
+  (is (before 
+       (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "a") 
+       (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "b")))
+  (is (not (before 
+	    (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "c") 
+	    (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "b")))))
+
+(test after-works
+  (is (after (make-instance 'version :major 3) (make-instance 'version :major 2)))
+  (is (after (make-instance 'version :major 1 :minor 3) (make-instance 'version :major 1 :minor 2)))
+  (is (after (make-instance 'version :major 1 :minor 1 :patch 3) (make-instance 'version :major 1 :minor 1 :patch 2)))
+  (is (after (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "c") (make-instance 'version :major 1 :minor 1 :patch 1 :pre-release "b"))))
